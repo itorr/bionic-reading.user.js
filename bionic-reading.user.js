@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         英文前部加粗
 // @namespace    https://github.com/itorr/bionic-reading.user.js
-// @version      0.5
-// @description  英文前部加粗
+// @version      0.6
+// @description  网页英文前部加粗脚本
 // @author       itorr
 // @match        *://*/*
 // @grant        none
@@ -44,6 +44,10 @@ if(customStyleEl)customStyleEl.removeAttribute('id');
 
 console.log({body})
 
+const enCodeHTML = s=> s.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+    return '&#'+i.charCodeAt(0)+';';
+ });
+
 const run = _=>{
     textEls = [];
     gather(body);
@@ -54,7 +58,7 @@ const run = _=>{
 
         const spanEl = document.createElement('spann');
         spanEl.isEnB = true;
-        spanEl.innerHTML = text.replace(/[a-z][a-z0-9]+/ig,word=>{
+        spanEl.innerHTML = enCodeHTML(text).replace(/[a-z][a-z0-9]+/ig,word=>{
             const halfLength = Math.ceil(word.length/2);
             return '<bbb>'+word.substr(0,halfLength)+'</bbb>'+word.substr(halfLength)
         })
