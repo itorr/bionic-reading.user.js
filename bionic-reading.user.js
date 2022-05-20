@@ -35,6 +35,9 @@ const excludeTagNames = [
     'b','strong'
 ].map(a=>a.toUpperCase());
 
+// 排除单词列表
+const excludeWords = ['is','and','as','if','the','of','to','be','for','this'];
+
 const gather = el=>{
     let textEls = [];
     el.childNodes.forEach(el=>{
@@ -62,6 +65,9 @@ const bionic = _=>{
         const spanEl = document.createElement('spann');
         spanEl.isEnB = true;
         spanEl.innerHTML = enCodeHTML(text).replace(engRegexig,word=>{
+
+            // 去除注释跳过这些词
+            // if(excludeWords.includes(word))return word;
 
             if(/ing$/.test(word)){
                 halfLength = word.length - 3;
