@@ -15,5 +15,8 @@ https://greasyfork.org/scripts/445211
 ## GitHub
 https://github.com/itorr/bionic-reading.user.js
 
+## 衍生
+中文版本的尝试 [@zcf0508/bionic-reading.user.js](https://github.com/zcf0508/bionic-reading.user.js)
+
 ## 微博
 https://weibo.com/1197780522/LtIj8bGbo
