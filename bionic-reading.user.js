@@ -74,27 +74,25 @@ let replaceTextByEl = el=>{
     el.remove();
 };
 
-if(/reddit/.test(location.hostname)){
-    replaceTextByEl = el=>{
-        el.data = el.data.replace(engRegexig,word=>{
-            let halfLength;
-            if(/ing$/.test(word)){
-                halfLength = word.length - 3;
-            }else if(word.length<5){
-                halfLength = Math.floor(word.length/2);
-            }else{
-                halfLength = Math.ceil(word.length/2);
-            }
-            const a = word.substr(0,halfLength).
-                replace(/[a-z]/g,w=>'\uD835' + String.fromCharCode(w.charCodeAt(0)+56717)).
-                replace(/[A-Z]/g,w=>'\uD835' + String.fromCharCode(w.charCodeAt(0)+56723));
-            const b = word.substr(halfLength).
-                replace(/[a-z]/g,w=> String.fromCharCode(55349,w.charCodeAt(0)+56665)).
-                replace(/[A-Z]/g,w=> String.fromCharCode(55349,w.charCodeAt(0)+56671));
-            return a + b;
-        })
-    }
-}
+//     replaceTextByEl = el=>{
+//         el.data = el.data.replace(engRegexig,word=>{
+//             let halfLength;
+//             if(/ing$/.test(word)){
+//                 halfLength = word.length - 3;
+//             }else if(word.length<5){
+//                 halfLength = Math.floor(word.length/2);
+//             }else{
+//                 halfLength = Math.ceil(word.length/2);
+//             }
+//             const a = word.substr(0,halfLength).
+//                 replace(/[a-z]/g,w=>'\uD835' + String.fromCharCode(w.charCodeAt(0)+56717)).
+//                 replace(/[A-Z]/g,w=>'\uD835' + String.fromCharCode(w.charCodeAt(0)+56723));
+//             const b = word.substr(halfLength).
+//                 replace(/[a-z]/g,w=> String.fromCharCode(55349,w.charCodeAt(0)+56665)).
+//                 replace(/[A-Z]/g,w=> String.fromCharCode(55349,w.charCodeAt(0)+56671));
+//             return a + b;
+//         })
+//     }
 
 const bionic = _=>{
     const textEls = gather(body);
@@ -120,7 +118,7 @@ if(window.ResizeObserver){
         return open.apply(this,arguments);
     };
     document.addEventListener('click',lazy(bionic));
-}
 
-window.addEventListener('load',lazy(bionic));
-document.addEventListener("DOMContentLoaded",lazy(bionic));
+    window.addEventListener('load',lazy(bionic));
+    document.addEventListener("DOMContentLoaded",lazy(bionic));
+}
