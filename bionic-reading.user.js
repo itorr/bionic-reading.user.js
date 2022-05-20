@@ -59,7 +59,13 @@ const run = _=>{
         const spanEl = document.createElement('spann');
         spanEl.isEnB = true;
         spanEl.innerHTML = enCodeHTML(text).replace(/[a-z][a-z0-9]+/ig,word=>{
-            const halfLength = Math.ceil(word.length/2);
+
+            let halfLength = Math.ceil(word.length/2);
+
+            if (word.length <= 3) {
+                halfLength = 1;
+            }
+
             return '<bbb>'+word.substr(0,halfLength)+'</bbb>'+word.substr(halfLength)
         })
         textEl.after(spanEl);
