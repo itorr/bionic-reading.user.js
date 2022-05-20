@@ -1,21 +1,42 @@
 // ==UserScript==
 // @name         英文前部加粗
 // @namespace    https://github.com/itorr/bionic-reading.user.js
-// @version      0.6
+// @version      0.8
 // @description  网页英文前部加粗脚本
 // @author       itorr
 // @match        *://*/*
 // @grant        none
 // @license      MIT
 // @run-at       document-idle
+// @supportURL   https://github.com/itorr/bionic-reading.user.js/issuse
 // ==/UserScript==
+
+const enCodeHTML = s=> s.replace(/[\u00A0-\u9999<>\&]/g,w=>'&#'+w.charCodeAt(0)+';');
+
+let body = document.body;
+
+if(/weibo/.test(location.hostname)){
+    const wbMainEl = document.querySelector('.WB_main');
+    if(wbMainEl) body = wbMainEl;
+
+    // 修复旧版微博自定义样式失效 bug
+    const customStyleEl = document.querySelector('#custom_style');
+    if(customStyleEl)customStyleEl.removeAttribute('id');
+}
 
 const styleEl = document.createElement('style');
 styleEl.innerHTML = 'bbb{font-weight:bold;}';
 
-let textEls = [];
-const excludeTagNames = ['script','style','xmp','input','textarea','pre','code'].map(a=>a.toUpperCase());
+const excludeTagNames = [
+    'script','style','xmp',
+    'input','textarea',
+    'pre','code',
+    'h1','h2','h3','h4',
+    'b','strong'
+].map(a=>a.toUpperCase());
+
 const gather = el=>{
+    let textEls = [];
     el.childNodes.forEach(el=>{
         if(el.isEnB) return;
 
@@ -23,47 +44,31 @@ const gather = el=>{
             textEls.push(el);
         }else if(el.childNodes){
             if(excludeTagNames.includes(el.tagName)) return;
-            gather(el)
+            textEls = textEls.concat(gather(el))
         }
     })
+    return textEls;
 };
 
-let body = document.body;
-
-
-if(/weibo/.test(location.hostname)){
-    const wbMain = document.querySelector('.WB_main');
-    if(wbMain){
-        body = wbMain;
-    }
-}
-
-const customStyleEl = document.querySelector('#custom_style');
-if(customStyleEl)customStyleEl.removeAttribute('id');
-
-
-console.log({body})
-
-const enCodeHTML = s=> s.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-    return '&#'+i.charCodeAt(0)+';';
- });
-
-const run = _=>{
-    textEls = [];
-    gather(body);
+const engRegexi  = /[a-z][a-z0-9]+/i;
+const engRegexig = /[a-z][a-z0-9]+/ig;
+const bionic = _=>{
+    const textEls = gather(body);
 
     textEls.forEach(textEl=>{
         const text = textEl.data;
-        if(!/[a-z][a-z0-9]+/i.test(text))return;
+        if(!engRegexi.test(text))return;
 
         const spanEl = document.createElement('spann');
         spanEl.isEnB = true;
-        spanEl.innerHTML = enCodeHTML(text).replace(/[a-z][a-z0-9]+/ig,word=>{
+        spanEl.innerHTML = enCodeHTML(text).replace(engRegexig,word=>{
 
-            let halfLength = Math.ceil(word.length/2);
-
-            if (word.length <= 3) {
-                halfLength = 1;
+            if(/ing$/.test(word)){
+                halfLength = word.length - 3;
+            }else if(word.length<5){
+                halfLength = Math.floor(word.length/2);
+            }else{
+                halfLength = Math.ceil(word.length/2);
             }
 
             return '<bbb>'+word.substr(0,halfLength)+'</bbb>'+word.substr(halfLength)
@@ -73,17 +78,20 @@ const run = _=>{
     });
     document.head.appendChild(styleEl);
 }
-run();
-const _run = ms=> _=>setTimeout(run,ms);
+
+const lazy = (func,ms = 0)=> {
+    return _=>{
+        clearTimeout(func.T)
+        func.T = setTimeout(func,ms)
+    }
+};
+lazy(bionic);
 
 const {open,send} = XMLHttpRequest.prototype;
-
 XMLHttpRequest.prototype.open = function(){
-    this.addEventListener('load',_run(200));
+    this.addEventListener('load',lazy(bionic));
     return open.apply(this,arguments);
 };
-
-document.addEventListener('click',_run(250));
-window.addEventListener('load',_run(200));
-document.addEventListener("DOMContentLoaded",_run(200));
-
+document.addEventListener('click',lazy(bionic));
+window.addEventListener('load',lazy(bionic));
+document.addEventListener("DOMContentLoaded",lazy(bionic));
