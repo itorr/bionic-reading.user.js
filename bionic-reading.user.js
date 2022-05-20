@@ -85,7 +85,7 @@ const lazy = (func,ms = 0)=> {
         func.T = setTimeout(func,ms)
     }
 };
-lazy(bionic);
+lazy(bionic)();
 
 const {open,send} = XMLHttpRequest.prototype;
 XMLHttpRequest.prototype.open = function(){
@@ -95,3 +95,6 @@ XMLHttpRequest.prototype.open = function(){
 document.addEventListener('click',lazy(bionic));
 window.addEventListener('load',lazy(bionic));
 document.addEventListener("DOMContentLoaded",lazy(bionic));
+
+(new ResizeObserver(lazy(bionic,100))).observe(body);
+
