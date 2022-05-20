@@ -8,7 +8,7 @@
 // @grant        none
 // @license      MIT
 // @run-at       document-idle
-// @supportURL   https://github.com/itorr/bionic-reading.user.js/issuse
+// @supportURL   https://github.com/itorr/bionic-reading.user.js/issues
 // ==/UserScript==
 
 const enCodeHTML = s=> s.replace(/[\u00A0-\u9999<>\&]/g,w=>'&#'+w.charCodeAt(0)+';');
@@ -52,17 +52,32 @@ const gather = el=>{
 
 const engRegexi  = /[a-z][a-z0-9]+/i;
 const engRegexig = /[a-z][a-z0-9]+/ig;
-const bionic = _=>{
-    const textEls = gather(body);
+let replaceTextByEl = el=>{
+    const text = el.data;
+    if(!engRegexi.test(text))return;
 
-    textEls.forEach(textEl=>{
-        const text = textEl.data;
-        if(!engRegexi.test(text))return;
+    const spanEl = document.createElement('spann');
+    spanEl.isEnB = true;
+    spanEl.innerHTML = enCodeHTML(text).replace(engRegexig,word=>{
+        let halfLength;
+        if(/ing$/.test(word)){
+            halfLength = word.length - 3;
+        }else if(word.length<5){
+            halfLength = Math.floor(word.length/2);
+        }else{
+            halfLength = Math.ceil(word.length/2);
+        }
 
-        const spanEl = document.createElement('spann');
-        spanEl.isEnB = true;
-        spanEl.innerHTML = enCodeHTML(text).replace(engRegexig,word=>{
+        return '<bbb>'+word.substr(0,halfLength)+'</bbb>'+word.substr(halfLength)
+    })
+    el.after(spanEl);
+    el.remove();
+};
 
+if(/reddit/.test(location.hostname)){
+    replaceTextByEl = el=>{
+        el.data = el.data.replace(engRegexig,word=>{
+            let halfLength;
             if(/ing$/.test(word)){
                 halfLength = word.length - 3;
             }else if(word.length<5){
@@ -70,12 +85,21 @@ const bionic = _=>{
             }else{
                 halfLength = Math.ceil(word.length/2);
             }
-
-            return '<bbb>'+word.substr(0,halfLength)+'</bbb>'+word.substr(halfLength)
+            const a = word.substr(0,halfLength).
+                replace(/[a-z]/g,w=>'\uD835' + String.fromCharCode(w.charCodeAt(0)+56717)).
+                replace(/[A-Z]/g,w=>'\uD835' + String.fromCharCode(w.charCodeAt(0)+56723));
+            const b = word.substr(halfLength).
+                replace(/[a-z]/g,w=> String.fromCharCode(55349,w.charCodeAt(0)+56665)).
+                replace(/[A-Z]/g,w=> String.fromCharCode(55349,w.charCodeAt(0)+56671));
+            return a + b;
         })
-        textEl.after(spanEl);
-        textEl.remove();
-    });
+    }
+}
+
+const bionic = _=>{
+    const textEls = gather(body);
+
+    textEls.forEach(replaceTextByEl);
     document.head.appendChild(styleEl);
 }
 
@@ -87,14 +111,16 @@ const lazy = (func,ms = 0)=> {
 };
 lazy(bionic)();
 
-const {open,send} = XMLHttpRequest.prototype;
-XMLHttpRequest.prototype.open = function(){
-    this.addEventListener('load',lazy(bionic));
-    return open.apply(this,arguments);
-};
-document.addEventListener('click',lazy(bionic));
+if(window.ResizeObserver){
+    (new ResizeObserver(lazy(bionic,100))).observe(body);
+}else{
+    const {open,send} = XMLHttpRequest.prototype;
+    XMLHttpRequest.prototype.open = function(){
+        this.addEventListener('load',lazy(bionic));
+        return open.apply(this,arguments);
+    };
+    document.addEventListener('click',lazy(bionic));
+}
+
 window.addEventListener('load',lazy(bionic));
 document.addEventListener("DOMContentLoaded",lazy(bionic));
-
-(new ResizeObserver(lazy(bionic,100))).observe(body);
-
