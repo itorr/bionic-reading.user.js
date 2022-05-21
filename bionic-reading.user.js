@@ -25,7 +25,14 @@ if(/weibo/.test(location.hostname)){
 }
 
 const styleEl = document.createElement('style');
-styleEl.innerHTML = 'bbb{font-weight:bold;}';
+styleEl.innerHTML = `
+bbb{
+    font-weight:bold;
+}
+a spann{
+    pointer-events: none;
+}
+`;
 
 const excludeTagNames = [
     'script','style','xmp',
