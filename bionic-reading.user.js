@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         英文前部加粗
 // @namespace    https://github.com/itorr/bionic-reading.user.js
-// @version      0.8
+// @version      0.8.1
 // @description  网页英文前部加粗脚本
 // @author       itorr
 // @match        *://*/*
@@ -29,7 +29,7 @@ styleEl.innerHTML = 'bbb{font-weight:bold;}';
 
 const excludeTagNames = [
     'script','style','xmp',
-    'input','textarea',
+    'input','textarea','select',
     'pre','code',
     'h1','h2','h3','h4',
     'b','strong'
@@ -44,6 +44,10 @@ const gather = el=>{
             textEls.push(el);
         }else if(el.childNodes){
             if(excludeTagNames.includes(el.tagName)) return;
+
+            // Skip DIV Code Frame
+            if(el.getAttribute('class').includes('highlight')) return;
+            
             textEls = textEls.concat(gather(el))
         }
     })
