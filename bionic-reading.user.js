@@ -53,7 +53,7 @@ const gather = el=>{
             if(excludeTagNames.includes(el.tagName)) return;
 
             // Skip DIV Code Frame
-            if(el.getAttribute('class').includes('highlight')) return;
+            if(el.getAttribute('class') && el.getAttribute('class').includes('highlight')) return;
             
             textEls = textEls.concat(gather(el))
         }
