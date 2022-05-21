@@ -53,7 +53,7 @@ const gather = el=>{
             if(excludeTagNames.includes(el.tagName)) return;
 
             // Skip DIV Code Frame
-            if(el.getAttribute('class') && el.getAttribute('class').includes('highlight')) return;
+            if(el.getAttribute && el.getAttribute('class') && el.getAttribute('class').includes('highlight')) return;
             
             textEls = textEls.concat(gather(el))
         }
@@ -61,15 +61,15 @@ const gather = el=>{
     return textEls;
 };
 
-const engRegexi  = /[a-z][a-z0-9]+/i;
-const engRegexig = /[a-z][a-z0-9]+/ig;
+const engRegex  = /[a-zA-Z][a-z]+/;
+const engRegexg = /[a-zA-Z][a-z]+/g;
 let replaceTextByEl = el=>{
     const text = el.data;
-    if(!engRegexi.test(text))return;
+    if(!engRegex.test(text))return;
 
     const spanEl = document.createElement('spann');
     spanEl.isEnB = true;
-    spanEl.innerHTML = enCodeHTML(text).replace(engRegexig,word=>{
+    spanEl.innerHTML = enCodeHTML(text).replace(engRegexg,word=>{
         let halfLength;
         if(/ing$/.test(word)){
             halfLength = word.length - 3;
@@ -86,7 +86,7 @@ let replaceTextByEl = el=>{
 };
 
 //     replaceTextByEl = el=>{
-//         el.data = el.data.replace(engRegexig,word=>{
+//         el.data = el.data.replace(engRegexg,word=>{
 //             let halfLength;
 //             if(/ing$/.test(word)){
 //                 halfLength = word.length - 3;
