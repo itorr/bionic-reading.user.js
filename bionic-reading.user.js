@@ -51,6 +51,7 @@ const excludeClasses = [
     'highlight',
     'katex-display'
 ]
+const excludeClassesRegexi = new RegExp(excludeClasses.join('|'),'i');
 
 const gather = el=>{
     let textEls = [];
@@ -62,8 +63,7 @@ const gather = el=>{
             textEls.push(el);
         }else if(el.childNodes){
             if(excludeTagNames.includes(el.tagName)) return;
-            if(excludeClasses.some(c=>el.classList.contains(c))) return;
-            
+            if(el.getAttribute && el.getAttribute('class') && excludeClassesRegexi.test(el.getAttribute('class'))) return;
             textEls = textEls.concat(gather(el))
         }
     })
