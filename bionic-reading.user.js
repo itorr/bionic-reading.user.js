@@ -44,7 +44,9 @@ const excludeTagNames = [
     'input','textarea','select',
     'pre','code',
     'h1','h2','h3','h4',
-    'b','strong'
+    'b','strong',
+    'svg','embed',
+    'img','audio','video',
 ].map(a=>a.toUpperCase());
 
 const excludeClasses = [
@@ -135,8 +137,6 @@ const lazy = (func,ms = 15)=> {
     }
 };
 
-bionic();
-
 const listenerFunc = lazy(_=>{
     if(!isBionic) return;
 
@@ -155,12 +155,12 @@ if(window.MutationObserver){
         this.addEventListener('load',listenerFunc);
         return open.apply(this,arguments);
     };
-    window.addEventListener('load',listenerFunc);
     document.addEventListener('DOMContentLoaded',listenerFunc);
     document.addEventListener('DOMNodeInserted',listenerFunc);
 }
 
 
+window.addEventListener('load',bionic);
 // document.addEventListener('click',listenerFunc);
 
 
