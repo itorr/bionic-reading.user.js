@@ -47,7 +47,8 @@ const excludeTagNames = [
     'b','strong',
     'svg','embed',
     'img','audio','video',
-].map(a=>a.toUpperCase());
+    'canvas',
+];
 
 const excludeClasses = [
     'highlight',
@@ -64,7 +65,7 @@ const gather = el=>{
         if(el.nodeType === 3){
             textEls.push(el);
         }else if(el.childNodes){
-            if(excludeTagNames.includes(el.tagName)) return;
+            if(excludeTagNames.includes(el.tagName.toLowerCase())) return;
             if(el.getAttribute && el.getAttribute('class') && excludeClassesRegexi.test(el.getAttribute('class'))) return;
             textEls = textEls.concat(gather(el))
         }
