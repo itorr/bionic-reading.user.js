@@ -47,6 +47,11 @@ const excludeTagNames = [
     'b','strong'
 ].map(a=>a.toUpperCase());
 
+const excludeClasses = [
+    'highlight',
+    'katex-display'
+]
+
 const gather = el=>{
     let textEls = [];
     el.childNodes.forEach(el=>{
@@ -57,9 +62,7 @@ const gather = el=>{
             textEls.push(el);
         }else if(el.childNodes){
             if(excludeTagNames.includes(el.tagName)) return;
-
-            // Skip DIV Code Frame
-            if(el.getAttribute && el.getAttribute('class') && el.getAttribute('class').includes('highlight')) return;
+            if(excludeClasses.some(c=>el.classList.contains(c))) return;
             
             textEls = textEls.concat(gather(el))
         }
