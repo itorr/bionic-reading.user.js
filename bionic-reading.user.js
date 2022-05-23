@@ -39,7 +39,7 @@ html[data-site="greasyfork"] a bionic{
 
 document.documentElement.setAttribute('data-site',location.hostname.replace(/\.\w+$|www\./ig,''))
 
-const excludeTagNames = [
+const excludeNodeNames = [
     'script','style','xmp',
     'input','textarea','select',
     'pre','code',
@@ -66,7 +66,7 @@ const gather = el=>{
         if(el.nodeType === 3){
             textEls.push(el);
         }else if(el.childNodes){
-            if(el.tagName && excludeTagNames.includes(el.tagName.toLowerCase())) return;
+            if(excludeNodeNames.includes(el.nodeName.toLowerCase())) return;
             if(el.getAttribute && el.getAttribute('class') && excludeClassesRegexi.test(el.getAttribute('class'))) return;
             textEls = textEls.concat(gather(el))
         }
