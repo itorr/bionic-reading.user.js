@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         英文前部加粗
 // @namespace    https://github.com/itorr/bionic-reading.user.js
-// @version      0.8.3
+// @version      0.8.4
 // @description  网页英文前部加粗脚本 Ctrl + B / ⌘ + B 开启关闭
 // @author       itorr
 // @match        *://*/*
@@ -52,7 +52,8 @@ const excludeTagNames = [
 
 const excludeClasses = [
     'highlight',
-    'katex-display'
+    'katex',
+    'editor',
 ]
 const excludeClassesRegexi = new RegExp(excludeClasses.join('|'),'i');
 
@@ -65,7 +66,7 @@ const gather = el=>{
         if(el.nodeType === 3){
             textEls.push(el);
         }else if(el.childNodes){
-            if(excludeTagNames.includes(el.tagName.toLowerCase())) return;
+            if(el.tagName && excludeTagNames.includes(el.tagName.toLowerCase())) return;
             if(el.getAttribute && el.getAttribute('class') && excludeClassesRegexi.test(el.getAttribute('class'))) return;
             textEls = textEls.concat(gather(el))
         }
