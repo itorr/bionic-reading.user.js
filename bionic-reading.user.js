@@ -43,7 +43,7 @@ const excludeNodeNames = [
     'script','style','xmp',
     'input','textarea','select',
     'pre','code',
-    'h1','h2','h3','h4',
+    'h1','h2', // 'h3','h4',
     'b','strong',
     'svg','embed',
     'img','audio','video',
@@ -75,7 +75,7 @@ const gather = el=>{
 };
 
 const engRegex  = /[a-zA-Z][a-z]+/;
-const engRegexg = /[a-zA-Z][a-z]+/g;
+const engRegexg = new RegExp(engRegex,'g');
 let replaceTextByEl = el=>{
     const text = el.data;
     if(!engRegex.test(text))return;
