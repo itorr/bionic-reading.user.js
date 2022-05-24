@@ -107,7 +107,7 @@ const excludeClasses = [
     'editor',
 ]
 const excludeClassesRegexi = new RegExp(excludeClasses.join('|'),'i');
-
+const linkRegex = /^https?:\/\//;
 const gather = el=>{
     let textEls = [];
     el.childNodes.forEach(el=>{
@@ -117,7 +117,13 @@ const gather = el=>{
         if(el.nodeType === 3){
             textEls.push(el);
         }else if(el.childNodes){
-            if(excludeNodeNames.includes(el.nodeName.toLowerCase())) return;
+            const nodeName = el.nodeName.toLowerCase();
+            if(excludeNodeNames.includes(nodeName)) return;
+            if(config.skipLinks){
+                if(nodeName === 'a'){
+                    if(linkRegex.test(el.textContent)) return;
+                }
+            }
             if(el.getAttribute){
                 if(el.getAttribute('class') && excludeClassesRegexi.test(el.getAttribute('class'))) return;
 
