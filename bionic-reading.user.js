@@ -152,8 +152,9 @@ const getHalfLength = word=>{
 
 
 let count = 0;
+const saccadeRound = config.saccade + 1;
 const saccadeCounter = _=>{
-    return ++count % config.saccade === 0;
+    return ++count % saccadeRound === 0;
 };
 const replaceTextByEl = el=>{
     const text = el.data;
