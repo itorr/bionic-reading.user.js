@@ -1,6 +1,8 @@
 # 网页英文前部加粗 用户脚本
 把英文每个词前半部加粗，阅读速度可能可以大幅度提高
 
+This repository only is simply Bold half of the words, Not real **Bionic Reading**. The real one is in https://bionic-reading.com/
+
 ## 快捷键
 <kbd>⌘</kbd>  + <kbd>B</kbd> or <kbd>Ctrl</kbd> + <kbd>B</kbd> 复原、重做
 
@@ -34,9 +36,6 @@
 ```
 
 
-
-## Bionic Reading 介绍
-https://bionic-reading.com/
 
 ## 什么是用户脚本？
 用户脚本是一段代码，它们能够优化您的网页浏览体验。安装之后，有些脚本能为网站添加新的功能，有些能使网站的界面更加易用，有些则能隐藏网站上烦人的部分内容。用户脚本都是由用户编写并向全世界发表的，您可以免费安装，轻松体验。
