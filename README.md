@@ -51,5 +51,7 @@ https://github.com/itorr/bionic-reading.user.js
 ## 衍生
 中文版本的尝试 [@zcf0508/bionic-reading.user.js](https://github.com/zcf0508/bionic-reading.user.js)
 
+Chrome Extension [@ivan-robic/bionic-reading](https://github.com/ivan-robic/bionic-reading)
+
 ## 微博
 https://weibo.com/1197780522/LtIj8bGbo
