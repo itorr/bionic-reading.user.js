@@ -12,22 +12,9 @@
 // @license           MIT
 // @run-at            document-end
 // @supportURL        https://github.com/itorr/bionic-reading.user.js/issues
-// @grant             GM.registerMenuCommand
-// @grant             GM.unregisterMenuCommand
-// @grant             GM_registerMenuCommand
-// @grant             GM_unregisterMenuCommand
-// @grant             GM.getValue
 // @grant             GM_getValue
-// @grant             GM.setValue
 // @grant             GM_setValue
 // ==/UserScript==
-
-let base = typeof GM === 'object' ? GM : {
-    getValue: typeof GM_getValue === 'function' ? GM_getValue : _=>{},
-    setValue: typeof GM_setValue === 'function' ? GM_setValue : _=>{},
-    registerMenuCommand : typeof GM_registerMenuCommand === 'function' ? GM_registerMenuCommand : _=>{},
-    registerMenuCommand : typeof GM_unregisterMenuCommand === 'function' ? GM_unregisterMenuCommand : _=>{},
-}
 
 
 const defaultConfig = {
@@ -42,22 +29,21 @@ const defaultConfig = {
     excludeWords:['is','and','as','if','the','of','to','be','for','this'],
 };
 
-
-const config = await (async _=>{
-    const _config = await base.getValue('config');
-    if(!_config) return defaultConfig;
-
-    for(let key in defaultConfig){
-        if(_config[key] === undefined) _config[key] = defaultConfig[key];
-    }
-
-    return _config;
-})();
-
+let config = defaultConfig;
 try{
-    await base.setValue('config',config);
+    config = (_=>{
+        const _config = GM_getValue('config');
+        if(!_config) return defaultConfig;
+    
+        for(let key in defaultConfig){
+            if(_config[key] === undefined) _config[key] = defaultConfig[key];
+        }
+        return _config;
+    })();
+    
+    GM_setValue('config',config);
 }catch(e){
-
+    console.log('读取默认配置失败')
 }
 
 console.log(JSON.stringify(config,0,2))
