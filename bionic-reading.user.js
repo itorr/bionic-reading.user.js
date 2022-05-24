@@ -171,8 +171,16 @@ const replaceTextByEl = el=>{
     el.remove();
 };
 
+let replacedEl = [];
 const replaceTextSymbolModeByEl = el=>{
-    el.data = el.data.replace(engRegexg,word=>{
+    replacedEl.push(el);
+    let text = el.data;
+    if(el.originData){
+        text = el.originData;
+    }
+    el.originData = text;
+
+    el.data = text.replace(engRegexg,word=>{
         if(config.skipWords && config.excludeWords.includes(word)) return word;
         if(config.saccade && !saccadeCounter()) return word;
 
@@ -236,15 +244,25 @@ if(config.autoBionic){ // auto Bionic
 
 
 const revoke = _=>{
-    const els = [...document.querySelectorAll('bionic')];
+    if(config.symbolMode){
+        replacedEl = [...new Set(replacedEl)]
+        replacedEl.forEach(el=>{
+            const { originData } = el
+            if(!originData) return;
 
-    els.forEach(el=>{
-        const {originEl} = el;
-        if(!originEl) return;
+            el.data = originData;
+        })
+    }else{
+        const els = [...document.querySelectorAll('bionic')];
 
-        el.after(originEl);
-        el.remove();
-    })
+        els.forEach(el=>{
+            const {originEl} = el;
+            if(!originEl) return;
+    
+            el.after(originEl);
+            el.remove();
+        })
+    }
 
     isBionic = false;
 };
