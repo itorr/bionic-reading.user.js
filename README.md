@@ -12,6 +12,7 @@ This repository only is simply Bold half of the words, Not real **Bionic Reading
 ```JavaScript
 {
     "config": {
+        "key": "b", // 自定义 ( Ctrl / ⌘ ) + ？ 快捷键
         "autoBionic": true, /* 开启页面默认运行 */
         "skipLinks": false, /* 跳过链接 */
         "skipWords": false, /* 跳过特定单词 */

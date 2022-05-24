@@ -18,6 +18,7 @@
 
 
 const defaultConfig = {
+    key: 'b',
     autoBionic: true,
     skipLinks: false,
     skipWords: false,
@@ -269,7 +270,7 @@ document.addEventListener('keydown',e=>{
     const { ctrlKey , metaKey, key } = e;
 
     if( ctrlKey || metaKey ){
-        if(key === 'b'){
+        if(key === config.key){
             if(isBionic){
                 revoke();
             }else{
