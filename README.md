@@ -1,14 +1,17 @@
 # 网页英文前部加粗 用户脚本
 把英文每个词前半部加粗，阅读速度可能可以大幅度提高
 
-This repository only is simply Bold half of the words, Not real **Bionic Reading**. The real one is in https://bionic-reading.com/
+This repository only is simply Bold half of the words, Not real **Bionic Reading**. 
+The real one is in https://bionic-reading.com/
 
 ## 快捷键
 <kbd>⌘</kbd>  + <kbd>B</kbd> or <kbd>Ctrl</kbd> + <kbd>B</kbd> 复原、重做
 
 ## 选项
-配置选项放在了 油猴脚本 存储 中
+配置选项放在了 油猴脚本 存储 中。
+
 编辑对应脚本、切换到存储选项卡，编辑 `config` JSON
+
 ```JavaScript
 {
     "config": {
