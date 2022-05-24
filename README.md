@@ -35,6 +35,8 @@ This repository only is simply Bold half of the words, Not real **Bionic Reading
 }
 ```
 
+## 如何恢复默认选项
+清空脚本对应存储内容即可
 
 
 ## 什么是用户脚本？
