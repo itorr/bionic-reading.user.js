@@ -147,10 +147,8 @@ const listenerFunc = lazy(_=>{
 });
 
 const beforeBionic = _=>{
-    if(defaultOn){
-        bionic();
-    } else {
-        bionic();
+    bionic();
+    if(!defaultOn){
         revoke();
     }
 }
