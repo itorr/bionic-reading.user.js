@@ -37,7 +37,7 @@ const defaultConfig = {
     scale: 0.5,
     maxBionicLength: null,
     opacity: 1,
-    // saccade: 1, // 1 - ~
+    saccade: 0, // 0 - ~
     symbolMode: false,
     excludeWords:['is','and','as','if','the','of','to','be','for','this'],
 };
@@ -149,6 +149,12 @@ const getHalfLength = word=>{
     }
     return halfLength;
 }
+
+
+let count = 0;
+const saccadeCounter = _=>{
+    return ++count % config.saccade === 0;
+};
 const replaceTextByEl = el=>{
     const text = el.data;
     if(!engRegex.test(text))return;
@@ -157,9 +163,9 @@ const replaceTextByEl = el=>{
         const spanEl = document.createElement('bionic');
         spanEl.isEnB = true;
         spanEl.innerHTML = enCodeHTML(text).replace(engRegexg,word=>{
-            if(config.skipWords){
-                if(config.excludeWords.includes(word)) return word;
-            }
+            if(config.skipWords && config.excludeWords.includes(word)) return word;
+            if(config.saccade && !saccadeCounter()) return word;
+
             const halfLength = getHalfLength(word);
             return '<bbb>'+word.substr(0,halfLength)+'</bbb>'+word.substr(halfLength)
         })
@@ -173,6 +179,9 @@ const replaceTextByEl = el=>{
 
 const replaceTextSymbolModeByEl = el=>{
     el.data = el.data.replace(engRegexg,word=>{
+        if(config.skipWords && config.excludeWords.includes(word)) return word;
+        if(config.saccade && !saccadeCounter()) return word;
+
         const halfLength = getHalfLength(word);
         const a = word.substr(0,halfLength).
             replace(/[a-z]/g,w=>String.fromCharCode(55349,w.charCodeAt(0)+56717)).
@@ -188,10 +197,12 @@ const bionic = _=>{
     const textEls = gather(body);
 
     isBionic = true;
+    count = 0;
 
-    const replaceFunc = config.symbolMode ? replaceTextSymbolModeByEl : replaceTextByEl;
-
+    let replaceFunc = config.symbolMode ? replaceTextSymbolModeByEl : replaceTextByEl;
+    
     textEls.forEach(replaceFunc);
+
     document.head.appendChild(styleEl);
 }
 
@@ -225,7 +236,6 @@ if(window.MutationObserver){
 }
 
 if(config.autoBionic){ // auto Bionic
-    console.log(config.autoBionic)
     window.addEventListener('load',bionic);
 }
 // document.addEventListener('click',listenerFunc);
