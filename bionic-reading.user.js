@@ -11,6 +11,8 @@
 // @supportURL   https://github.com/itorr/bionic-reading.user.js/issues
 // ==/UserScript==
 
+let defaultOn = true;
+
 let isBionic = false;
 
 const enCodeHTML = s=> s.replace(/[\u00A0-\u9999<>\&]/g,w=>'&#'+w.charCodeAt(0)+';');
@@ -74,7 +76,7 @@ const gather = el=>{
     return textEls;
 };
 
-const engRegex  = /[a-zA-Z][a-z]+/;
+const engRegex = /[a-zA-Z][a-z]+/;
 const engRegexg = new RegExp(engRegex,'g');
 let replaceTextByEl = el=>{
     const text = el.data;
@@ -92,7 +94,6 @@ let replaceTextByEl = el=>{
             }else{
                 halfLength = Math.ceil(word.length/2);
             }
-    
             return '<bbb>'+word.substr(0,halfLength)+'</bbb>'+word.substr(halfLength)
         })
         spanEl.originEl = el;
@@ -145,6 +146,15 @@ const listenerFunc = lazy(_=>{
     bionic();
 });
 
+const beforeBionic = _=>{
+    if(defaultOn){
+        bionic();
+    } else {
+        bionic();
+        revoke();
+    }
+}
+
 if(window.MutationObserver){
     (new MutationObserver(listenerFunc)).observe(body,{
         childList: true,
@@ -162,7 +172,7 @@ if(window.MutationObserver){
 }
 
 
-window.addEventListener('load',bionic);
+window.addEventListener('load',beforeBionic);
 // document.addEventListener('click',listenerFunc);
 
 
@@ -189,7 +199,6 @@ const redo = _=>{
 
         if(!replaceEl) return;
 
-        
         el.after(replaceEl);
         el.remove();
     })
