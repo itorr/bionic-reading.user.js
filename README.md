@@ -12,6 +12,8 @@ The real one is in https://bionic-reading.com/
 
 编辑对应脚本、切换到存储选项卡，编辑 `config` JSON
 
+> 如果 储存 选项卡不可见：在油猴控制面板 (Dashboard) - 设置 (Settings) - 通用 (General) - 配置模式 (Config mode) - 选择 高级 (Advanced) 
+
 ```JavaScript
 {
     "config": {
