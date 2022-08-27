@@ -20,6 +20,7 @@
 const defaultConfig = {
     key: 'b',
     autoBionic: true,
+    onlyEnglish: false,
     skipLinks: false,
     skipWords: false,
     scale: 0.5,
@@ -48,6 +49,13 @@ try{
 }
 
 console.log(JSON.stringify(config,0,2))
+
+if(config.onlyEnglish){
+    if(document.documentElement.lang.substring(0,2)!="en"){
+        // 不知道有没有更优雅的退出方式
+        throw new Error("非英文页面, 终止执行")
+    }
+}
 
 let isBionic = false;
 
